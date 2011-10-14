@@ -1,30 +1,34 @@
 #!/usr/bin/env python2
 from Tkinter import *
-import sys,tkFileDialog,hashlib,tkMessageBox
+import sys,tkFileDialog,hashlib,tkMessageBox,os
 
 class MnmlWrtr:
         def __init__(self,root,file=None):
                 self.root=root
                 self.root.config(background="#FFFFFF")
-                w,h = root.winfo_screenwidth(), root.winfo_screenheight()
-                #root.overrideredirect(1)
-                root.geometry("%dx%d+0+0"%(w,h))
-                root.focus_set()
+                g = root.winfo_screenwidth(), root.winfo_screenheight()
+                root.geometry("%dx%d+0+0"%g)
                 root.bind("<Control-q>",lambda e: self.quit())
                 root.bind("<Control-o>",lambda e: self.open_dialog())
                 root.bind("<Control-s>",lambda e: self.save())
                 root.bind("<Control-n>",lambda e: self.new())
-                Frame(root,height=100,background="#FFFFFF").pack()
                 self.textinput=Text(root,wrap=WORD,width=60,height=20,font=("Sans","16"),
                 relief=FLAT,borderwidth=0)
                 self.textinput.focus_set()
-                self.textinput.pack()
-                self.signature=None
+                self.textinput.pack(pady=100)
+                self.signature=self.getsignature()
                 self.file=file
                 if self.file:
                         self.open()
-                self.signature=self.getsignature()        
+                else:
+                        self.new()
 
+        def set_title(self):
+                if self.file:
+                        (null,t)=os.path.split(self.file)
+                else:
+                        t="New Document"
+                self.root.title("mnmlwrt - %s"%t)
          
         def open_dialog(self):
                 if self.haschanged():
@@ -40,6 +44,7 @@ class MnmlWrtr:
                 f=open(self.file,"r")
                 c="".join(f.readlines())
                 f.close()
+                self.set_title()
                 self.textinput.delete(1.0,END)
                 self.textinput.insert(END,c)
                 self.signature=self.getsignature()
@@ -49,7 +54,10 @@ class MnmlWrtr:
                         a=self.asksave()
                         if not a:
                                 return None
+                self.file=None                
                 self.textinput.delete(1.0,END)
+                self.set_title()
+                self.signature=self.getsignature()
         
         def quit(self):
                 if self.haschanged():
@@ -58,7 +66,6 @@ class MnmlWrtr:
                                 return None
                 self.root.quit()
 
-
         def save(self):
                 if not self.file:
                         file=tkFileDialog.asksaveasfilename(title="save as...",initialfile="text.txt")
@@ -66,9 +73,11 @@ class MnmlWrtr:
                                 return None
                         else:
                                 self.file=file
+                                self.set_title()
                 if self.haschanged():
                         f=open(self.file,"w")
                         f.write(self.content())
+                        f.close()
                         self.signature=self.getsignature()
 
         def content(self):
@@ -89,10 +98,8 @@ class MnmlWrtr:
                 return True
 
 if __name__=="__main__":
-        root=Tk()
+        file=None
         if len(sys.argv)>1:
                 file=sys.argv[1]
-        else:
-                file=None
-        mw=MnmlWrtr(root,file)
-        root.mainloop()
+        mw=MnmlWrtr(Tk(),file)
+        mw.root.mainloop()
