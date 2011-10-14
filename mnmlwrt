@@ -1,0 +1,98 @@
+#!/usr/bin/env python2
+from Tkinter import *
+import sys,tkFileDialog,hashlib,tkMessageBox
+
+class MnmlWrtr:
+        def __init__(self,root,file=None):
+                self.root=root
+                self.root.config(background="#FFFFFF")
+                w,h = root.winfo_screenwidth(), root.winfo_screenheight()
+                #root.overrideredirect(1)
+                root.geometry("%dx%d+0+0"%(w,h))
+                root.focus_set()
+                root.bind("<Control-q>",lambda e: self.quit())
+                root.bind("<Control-o>",lambda e: self.open_dialog())
+                root.bind("<Control-s>",lambda e: self.save())
+                root.bind("<Control-n>",lambda e: self.new())
+                Frame(root,height=100,background="#FFFFFF").pack()
+                self.textinput=Text(root,wrap=WORD,width=60,height=20,font=("Sans","16"),
+                relief=FLAT,borderwidth=0)
+                self.textinput.focus_set()
+                self.textinput.pack()
+                self.signature=None
+                self.file=file
+                if self.file:
+                        self.open()
+                self.signature=self.getsignature()        
+
+         
+        def open_dialog(self):
+                if self.haschanged():
+                        a=self.asksave()
+                        if not a:
+                                return None
+                file=tkFileDialog.askopenfilename()
+                if file:
+                        self.file=file
+                        self.open()
+
+        def open(self):
+                f=open(self.file,"r")
+                c="".join(f.readlines())
+                f.close()
+                self.textinput.delete(1.0,END)
+                self.textinput.insert(END,c)
+                self.signature=self.getsignature()
+        
+        def new(self):
+                if self.haschanged():
+                        a=self.asksave()
+                        if not a:
+                                return None
+                self.textinput.delete(1.0,END)
+        
+        def quit(self):
+                if self.haschanged():
+                        a=self.asksave()
+                        if not a:
+                                return None
+                self.root.quit()
+
+
+        def save(self):
+                if not self.file:
+                        file=tkFileDialog.asksaveasfilename(title="save as...",initialfile="text.txt")
+                        if not file:
+                                return None
+                        else:
+                                self.file=file
+                if self.haschanged():
+                        f=open(self.file,"w")
+                        f.write(self.content())
+                        self.signature=self.getsignature()
+
+        def content(self):
+                return self.textinput.get(1.0,END).encode("utf-8")
+        
+        def getsignature(self):
+                return hashlib.md5(self.content()).digest()
+        
+        def haschanged(self): 
+                return self.signature!=self.getsignature()
+
+        def asksave(self):
+                save=tkMessageBox.askyesnocancel(message="You have unsaved edits, save now?")
+                if save==None:
+                        return False
+                if save:
+                        self.save()
+                return True
+
+if __name__=="__main__":
+        root=Tk()
+        if len(sys.argv)>1:
+                file=sys.argv[1]
+        else:
+                file=None
+        mw=MnmlWrtr(root,file)
+        root.mainloop()
