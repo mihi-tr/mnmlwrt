@@ -6,6 +6,7 @@ class MnmlWrtr:
         def __init__(self,root,file=None):
                 self.root=root
                 self.root.config(background="#FFFFFF")
+                root.wm_attributes(("-fullscreen"))
                 g = root.winfo_screenwidth(), root.winfo_screenheight()
                 root.geometry("%dx%d+0+0"%g)
                 root.bind("<Control-q>",lambda e: self.quit())
