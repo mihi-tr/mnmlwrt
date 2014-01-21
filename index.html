@@ -1,0 +1,63 @@
+<html><head><title>mnmlwrt - a minimal writer</title>
+<style>
+BODY { font-family: sans; 
+	margin-left: 20%;
+	width: 60%;
+	margin-top: 50px;}
+dt {
+    font-weight: bold;
+    display: inline;
+    }
+dd {
+    display: inline;
+    margin-left: 5px;
+    }
+dd:after {
+    content: "\A";
+    white-space: pre;
+    }
+dt:after {
+    content: ":";
+    }
+</style>
+</head>
+<body>
+<h1>mnmlwrt - a minimal writer</h1>
+<p>
+Lately I discovered the joy of focussed writing using minimal interfaces and
+editors. Since the selection of minimal writers available on Linux didn't
+really satisfy me, I thought: this isn't too hard. The design guidelines are:
+
+<ul>
+    <li>"minimal"</li>
+    <li>One file - so install isn't a hassle</li>
+    <li>little code</li>
+    <li>just the essentials</li>
+</ul>
+</p>
+<p>
+The 4 essentials of a text editor are: 1) creating new files, 2) editing
+files, 3) saving files and 4) opening files. This comes down to 4 keyboard
+shortcuts (you don't want to use the mouse while typing!
+
+<dl>
+<dt>ctrl-n</dt><dd>New file</dd>
+<dt>ctrl-o</dt><dd>Open file</dd>
+<dt>ctrl-s</dt><dd>Save file (or save as if no file name is given)</dd>
+<dt>ctrl-q</dt><dd>Quit</dd>
+</dl>
+</p>
+<h2>Installation</h2>
+<p>
+<pre>pip install git+https://github.com/mihi-tr/mnmlwrt.git</pre></p>
+
+<p>
+Clone on <a href="https://github.com/mihi-tr/mnmlwrt">github</a>
+</p>
+<div>
+Files:</br>
+<ul>
+<li><a href="mnmlwrt">mnmlwrt</a></li>
+</ul>
+</body>
+
