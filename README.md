@@ -9,14 +9,17 @@ Lately I discovered the joy of focussed writing using minimal interfaces and edi
 
 The 4 essentials of a text editor are: 1) creating new files, 2) editing files, 3) saving files and 4) opening files. This comes down to 4 keyboard shortcuts (you don't want to use the mouse while typing!
 
-* <ctrl-n> New file
-* <ctrl-o> Open file
-* <ctrl-s> Save file (or save as if no file name is given)
-* <ctrl-q> Quit
+* ```ctrl-n``` New file
+* ```ctrl-o``` Open file
+* ```ctrl-s``` Save file (or save as if no file name is given)
+* ```ctrl-q``` Quit
 
 ## Installation
 
 ```
-pip install git+
+pip install git+https://github.com/mihi-tr/mnmlwrt.git
 ```
 
+## Running
+
+simply run ```mnmlwrt```
